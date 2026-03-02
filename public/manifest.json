@@ -1,0 +1,20 @@
+{
+  "name": "Urbanaura SMS",
+  "short_name": "Urbanaura SMS",
+  "description": "An app to manage Urbanaura's SMS Marketing",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["productivity"]
+}

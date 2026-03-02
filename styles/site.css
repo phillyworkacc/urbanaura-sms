@@ -1,0 +1,58 @@
+.app {
+   width: 100dvw;
+   height: 100dvh;
+}
+
+.page-container {
+   width: 100%;
+   height: 100%;
+   max-width: 1500px;
+   padding: 0 20px;
+}
+
+.app .app-header {
+   width: 100%;
+   height: 7vh;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-bottom: 1px solid #eeeeee;
+}
+
+.app .app-content {
+   width: 100%;
+   height: 92vh;
+   padding: 30px 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+
+/* Recharts Styling */
+.recharts-tooltip-wrapper > .recharts-default-tooltip {
+   border-radius: 10px !important;
+   padding: 5px 10px !important;
+   display: flex;
+   align-items: center;
+   gap: 20px;
+   box-shadow: 0 2px 4px 4px rgba(209, 209, 209, 0.267);
+   border: 1px solid #e4e4e4 !important;
+}
+.recharts-tooltip-wrapper > .recharts-default-tooltip p { font-weight: 700 !important; }
+.recharts-tooltip-wrapper > .recharts-default-tooltip .recharts-tooltip-item-value {
+   color: var(--accent-color) !important;
+   font-weight: 600 !important;
+}
+
+.recharts-wrapper > svg > g.recharts-cartesian-grid > g > line {
+   stroke: #adadad69;
+}
+
+.recharts-wrapper > svg > g.recharts-layer.recharts-cartesian-axis.recharts-xAxis.xAxis > g > g > line { display: none !important; }
+.recharts-wrapper > svg > g.recharts-layer.recharts-cartesian-axis.recharts-xAxis.xAxis > g > g > line { display: none !important; }
+.recharts-wrapper > svg > g.recharts-layer.recharts-cartesian-axis.recharts-yAxis.yAxis > g > g > line { display: none !important; }
+.recharts-wrapper > svg > g.recharts-layer.recharts-cartesian-axis.recharts-yAxis.yAxis > line { display: none !important; }
+.recharts-wrapper > svg > g.recharts-layer.recharts-cartesian-axis.recharts-xAxis.xAxis > line { display: none !important; }
+.recharts-tooltip-wrapper > .recharts-default-tooltip .recharts-tooltip-item-name { display: none !important; }
+.recharts-tooltip-wrapper > .recharts-default-tooltip .recharts-tooltip-item-separator { display: none !important; }
