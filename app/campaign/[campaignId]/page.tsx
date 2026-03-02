@@ -20,7 +20,7 @@ export async function generateMetadata ({ params }: CampaignProps) {
       .where(eq(campaignsTable.campaignId, campaignId));
 
    return {
-      title: `${campaignData[0].name} - Client Conversations`
+      title: `${campaignData[0].name} - Campaign`
    };
 }
 

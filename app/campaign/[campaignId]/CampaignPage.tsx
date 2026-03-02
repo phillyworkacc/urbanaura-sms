@@ -65,6 +65,7 @@ export default function CampaignPage({ campaign }: CampaignPageProps) {
       close();
       if (sentCampaign) {
          toast.success("Sent Campaigns to all subscribers");
+         router.refresh();
       } else {
          toast.error("Failed to send campaign to all subscribers");
       }
