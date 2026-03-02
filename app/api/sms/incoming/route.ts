@@ -11,10 +11,7 @@ export async function POST(req: NextRequest) {
       const to = formData.get("To") as string;     // Twilio number
       const body = formData.get("Body") as string;
 
-      if (!process.env.TWILIO_NUMBER) return {
-         success: false,
-         error: "NO TWILIO PHONE NUMBER"
-      }
+      if (!process.env.TWILIO_NUMBER) return new Response("Error", { status: 500 });
 
       // validate twilio phone number
       const urbanauraPhoneNumber = process.env.TWILIO_NUMBER;
