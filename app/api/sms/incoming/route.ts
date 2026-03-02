@@ -19,6 +19,9 @@ export async function POST(req: NextRequest) {
          return new Response("Error", { status: 500 });
       }
 
+      console.log(from)
+      console.log(body)
+
       // check the content of the message if it says stop
       if (body.trim().startsWith("STOP".toUpperCase())) {
          // if the subscriber says stop
