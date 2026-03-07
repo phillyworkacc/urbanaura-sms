@@ -2,12 +2,12 @@ import { sendWelcomeSMSMessage } from "@/app/actions/twilio";
 import { db } from "@/db";
 import { subscribersTable } from "@/db/schemas";
 import { uuid } from "@/utils/uuid";
+import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 const allowedOrigins = [
    'https://uaofk.com',
-   'https://www.uaofk.com',
-   '*'
+   'https://www.uaofk.com'
 ];
 
 function makeCorsResponse(body: any, status: number, origin: string) {
@@ -39,6 +39,14 @@ export async function OPTIONS(req: Request) {
    });
 }
 
+function convertToPossiblePhones (phoneNumber: string) {
+   if (phoneNumber.startsWith("0")) {
+      return `+44${phoneNumber.substring(1)}`;
+   } else {
+      return phoneNumber;
+   }
+}
+
 export async function POST (req: NextRequest) {
    const origin = req.headers.get('origin') || '';
    if (!allowedOrigins.includes(origin)) {
@@ -49,18 +57,21 @@ export async function POST (req: NextRequest) {
 	const { phoneNumber } = body;
 
 	if (phoneNumber == "") {
-      return makeCorsResponse({ success: false }, 200, origin);
+      return makeCorsResponse({ success: false, error: "Please enter a phone number" }, 200, origin);
 	}
 
-   console.log(origin)
-   console.log(phoneNumber)
-
    try {
+      // check if the number already exists in the subscribers table
+		const exists = await db.select().from(subscribersTable).where(eq(subscribersTable.phoneNumber, convertToPossiblePhones(phoneNumber))).limit(1);
+      if (exists.length > 0) {
+         return makeCorsResponse({ success: false, error: "You are already an Urbanaura Insider" }, 200, origin);
+      }
+
       // add phone number to subscribers
       const subscriberId = uuid();
       const dateJoined = Date.now().toString();
 		const res = await db.insert(subscribersTable).values({
-         subscriberId, phoneNumber, dateJoined
+         subscriberId, phoneNumber: convertToPossiblePhones(phoneNumber), dateJoined
       });
 
       if (res.rowCount === 1) {
@@ -68,10 +79,10 @@ export async function POST (req: NextRequest) {
          const sendToNewSubscriber = await sendWelcomeSMSMessage(phoneNumber);
          return makeCorsResponse({ success: sendToNewSubscriber }, 200, origin);
       } else {
-         return makeCorsResponse({ success: false }, 200, origin);
+         return makeCorsResponse({ success: false, error: "An error occurred while trying to add you to the list. Please try again." }, 200, origin);
       }
 	} catch (e) {
 		console.log(e);
-      return makeCorsResponse({ success: false }, 200, origin);
+      return makeCorsResponse({ success: false, error: "An error occurred while trying to add you to the list. Please try again." }, 200, origin);
 	}
 }
