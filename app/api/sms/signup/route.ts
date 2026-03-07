@@ -4,27 +4,52 @@ import { subscribersTable } from "@/db/schemas";
 import { uuid } from "@/utils/uuid";
 import { NextRequest, NextResponse } from "next/server";
 
-const getCORSHeaders = () => {
-   const headers = new Headers();
-   headers.set('Access-Control-Allow-Origin', '*');
-   headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-   headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-   return headers;
-};
+const allowedOrigins = [
+   'https://uaofk.com',
+   'https://www.uaofk.com'
+];
 
-export async function OPTIONS() {
+function makeCorsResponse(body: any, status: number, origin: string) {
+   return new NextResponse(JSON.stringify(body), {
+      status,
+      headers: {
+         'Content-Type': 'application/json',
+         'Access-Control-Allow-Origin': origin,
+         'Access-Control-Allow-Methods': 'POST, OPTIONS',
+         'Access-Control-Allow-Headers': 'Content-Type',
+         'Access-Control-Max-Age': '86400',
+      },
+   });
+}
+
+export async function OPTIONS(req: Request) {
+   const origin = req.headers.get('origin') || '';
+   if (!allowedOrigins.includes(origin)) {
+      return new NextResponse('Forbidden', { status: 403 });
+   }
+
    return new NextResponse(null, {
       status: 204,
-      headers: getCORSHeaders(),
+      headers: {
+         'Access-Control-Allow-Origin': origin,
+         'Access-Control-Allow-Methods': 'POST, OPTIONS',
+         'Access-Control-Allow-Headers': 'Content-Type',
+         'Access-Control-Max-Age': '86400',
+      },
    });
 }
 
 export async function POST (req: NextRequest) {
+   const origin = req.headers.get('origin') || '';
+   if (!allowedOrigins.includes(origin)) {
+      return makeCorsResponse({ success: false }, 200, origin);
+   }
+
 	const body = await req.json();
 	const { phoneNumber } = body;
 
 	if (phoneNumber == "") {
-		return NextResponse.json(JSON.stringify({ success: false }), { status: 200, headers: getCORSHeaders() })
+      return makeCorsResponse({ success: false }, 200, origin);
 	}
 
    try {
@@ -38,12 +63,12 @@ export async function POST (req: NextRequest) {
       if (res.rowCount === 1) {
          // once added, send the user an sms message
          const sendToNewSubscriber = await sendWelcomeSMSMessage(phoneNumber);
-         return NextResponse.json(JSON.stringify({ success: sendToNewSubscriber }), { status: 200, headers: getCORSHeaders() })
+         return makeCorsResponse({ success: sendToNewSubscriber }, 200, origin);
       } else {
-   		return NextResponse.json(JSON.stringify({ success: false }), { status: 200, headers: getCORSHeaders() })
+         return makeCorsResponse({ success: false }, 200, origin);
       }
 	} catch (e) {
 		console.log(e);
-		return NextResponse.json(JSON.stringify({ success: false }), { status: 200, headers: getCORSHeaders() })
+      return makeCorsResponse({ success: false }, 200, origin);
 	}
 }
