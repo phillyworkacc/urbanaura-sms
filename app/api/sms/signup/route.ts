@@ -34,8 +34,7 @@ export async function OPTIONS(req: Request) {
       headers: {
          'Access-Control-Allow-Origin': origin,
          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-         'Access-Control-Allow-Headers': 'Content-Type',
-         'Access-Control-Max-Age': '86400',
+         'Access-Control-Allow-Headers': 'Content-Type'
       },
    });
 }
@@ -43,7 +42,7 @@ export async function OPTIONS(req: Request) {
 export async function POST (req: NextRequest) {
    const origin = req.headers.get('origin') || '';
    if (!allowedOrigins.includes(origin)) {
-      return makeCorsResponse({ success: false }, 403, origin);
+      return new NextResponse('Forbidden', { status: 403 });
    }
 
 	const body = await req.json();
