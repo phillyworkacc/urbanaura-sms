@@ -6,7 +6,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const allowedOrigins = [
    'https://uaofk.com',
-   'https://www.uaofk.com'
+   'https://www.uaofk.com',
+   '*'
 ];
 
 function makeCorsResponse(body: any, status: number, origin: string) {
@@ -42,7 +43,7 @@ export async function OPTIONS(req: Request) {
 export async function POST (req: NextRequest) {
    const origin = req.headers.get('origin') || '';
    if (!allowedOrigins.includes(origin)) {
-      return makeCorsResponse({ success: false }, 200, origin);
+      return makeCorsResponse({ success: false }, 403, origin);
    }
 
 	const body = await req.json();
@@ -51,6 +52,9 @@ export async function POST (req: NextRequest) {
 	if (phoneNumber == "") {
       return makeCorsResponse({ success: false }, 200, origin);
 	}
+
+   console.log(origin)
+   console.log(phoneNumber)
 
    try {
       // add phone number to subscribers
