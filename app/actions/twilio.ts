@@ -29,7 +29,7 @@ export async function sendSMSMessage (receivingPhoneNumber: string, message: str
       
       const urbanauraPhoneNumber = process.env.TWILIO_NUMBER;
       await client.messages.create({
-         body: `${message}\n\nReply STOP to unsubscribe.`,
+         body: `${message}\n\nReply STP to unsubscribe.`,
          from: urbanauraPhoneNumber,
          to: receivingPhoneNumber,
       })

@@ -1,12 +1,15 @@
 'use client'
 import './Table.css'
 import { formatMilliseconds } from '../../utils/date';
+import { useRouter } from 'next/navigation';
 
 type SubscribersTableProps = {
    subscribers: Subscriber[];
 }
 
 export default function SubscribersTable ({ subscribers }: SubscribersTableProps) {
+   const router = useRouter();
+   
    return (
       <div className="video-ideas-manage">
          <div className="table-container">
@@ -19,7 +22,7 @@ export default function SubscribersTable ({ subscribers }: SubscribersTableProps
                </thead>
                <tbody>
                   {subscribers.map((subscriber, index) => (
-                     <tr key={index}>
+                     <tr key={index} onClick={() => router.push(`/subscriber/${subscriber.subscriberId}`)}>
                         <td className='name'>{subscriber.phoneNumber}</td>
                         <td style={{textAlign:"center"}}>{formatMilliseconds(parseInt(subscriber.dateJoined), true, true)}</td>
                      </tr>

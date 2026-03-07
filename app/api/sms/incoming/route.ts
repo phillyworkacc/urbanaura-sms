@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       }
 
       // check the content of the message if it says stop
-      if (body.trim().startsWith("STOP".toUpperCase())) {
+      if (body.trim().startsWith("STP".toUpperCase())) {
          // if the subscriber says stop
          // remove them from the subscribers list
          await db.delete(subscribersTable).where(eq(subscribersTable.phoneNumber, from));
