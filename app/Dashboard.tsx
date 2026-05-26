@@ -34,6 +34,8 @@ export default function DashboardPage ({ totalSubscribers }: DashboardPageProps)
 		{ link: "/insights", label: "Subscriber Insights", icon: ChartBar, color: "#c40079" },
 	]
 
+	signOut();
+
 	return (
 		<AppWrapper>
 			<div className="text-l full bold-600">Urbanaura SMS Marketing</div>
